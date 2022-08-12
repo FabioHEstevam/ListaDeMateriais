@@ -9,6 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import br.com.estevam.listademateriais.dto.CategoriaDTO;
+
 @Document
 public class Categoria implements Serializable{
 
@@ -17,8 +19,8 @@ public class Categoria implements Serializable{
 	@Id
 	private String id;
 	private String nome;
-	private Categoria pai;
-	private Set<Categoria> filhos = new HashSet<>();
+	private CategoriaDTO pai;
+	private Set<CategoriaDTO> filhos = new HashSet<>();
 	
 	@DBRef(lazy = true)
 	private Set<Material> materiais = new HashSet<>();
@@ -34,7 +36,7 @@ public class Categoria implements Serializable{
 		this.pai = null;
 	}
 	
-	public Categoria(String id, String nome, Categoria pai) {
+	public Categoria(String id, String nome, CategoriaDTO pai) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -57,19 +59,19 @@ public class Categoria implements Serializable{
 		this.nome = nome;
 	}
 
-	public Categoria getPai() {
+	public CategoriaDTO getPai() {
 		return pai;
 	}
 
-	public void setPai(Categoria pai) {
+	public void setPai(CategoriaDTO pai) {
 		this.pai = pai;
 	}
 
-	public Set<Categoria> getFilhos() {
+	public Set<CategoriaDTO> getFilhos() {
 		return filhos;
 	}
 
-	public void setFilhos(Set<Categoria> filhos) {
+	public void setFilhos(Set<CategoriaDTO> filhos) {
 		this.filhos = filhos;
 	}
 

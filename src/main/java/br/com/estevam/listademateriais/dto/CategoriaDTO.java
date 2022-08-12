@@ -1,8 +1,6 @@
 package br.com.estevam.listademateriais.dto;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import br.com.estevam.listademateriais.model.Categoria;
 
@@ -12,7 +10,6 @@ public class CategoriaDTO implements Serializable{
 	
 	private String id;
 	private String nome;
-	private Set<CategoriaDTO> filhos = new HashSet<>();
 		
 	public CategoriaDTO() {
 		super();
@@ -38,14 +35,6 @@ public class CategoriaDTO implements Serializable{
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public Set<CategoriaDTO> getFilhos() {
-		return filhos;
-	}
-
-	public void setFilhos(Set<CategoriaDTO> filhos) {
-		this.filhos = filhos;
 	}
 
 }
