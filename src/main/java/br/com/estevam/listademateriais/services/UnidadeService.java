@@ -21,8 +21,8 @@ public class UnidadeService {
 	}
 	
 	public Unidade findById(String id) {
-		Optional<Unidade> user = repo.findById(id);
-		return user.orElseThrow(()->new ObjectNotFoundException("Unidade não encontrada"));
+		Optional<Unidade> obj = repo.findById(id);
+		return obj.orElseThrow(()->new ObjectNotFoundException("Unidade não encontrada"));
 	}
 	
 	public Unidade insert(Unidade obj) {

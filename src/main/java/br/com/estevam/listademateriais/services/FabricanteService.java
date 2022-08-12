@@ -22,8 +22,8 @@ public class FabricanteService {
 	}
 	
 	public Fabricante findById(String id) {
-		Optional<Fabricante> user = repo.findById(id);
-		return user.orElseThrow(()->new ObjectNotFoundException("Fabricante não encontrada"));
+		Optional<Fabricante> obj = repo.findById(id);
+		return obj.orElseThrow(()->new ObjectNotFoundException("Fabricante não encontrada"));
 	}
 	
 	public Fabricante insert(Fabricante obj) {

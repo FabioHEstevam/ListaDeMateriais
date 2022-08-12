@@ -5,23 +5,21 @@ import java.util.Objects;
 
 import br.com.estevam.listademateriais.model.Categoria;
 
-public class CategoriaDTO  implements Serializable{
+public class CategoriaResumoDTO implements Serializable{
 
 	private static final long serialVersionUID = 1l;
 	
 	private String id;
 	private String nome;
-	private CategoriaResumoDTO pai;
 	
-	public CategoriaDTO() {
+	public CategoriaResumoDTO() {
 		super();
 	}
 	
-	public CategoriaDTO(Categoria categoria) {
+	public CategoriaResumoDTO(Categoria categoria) {
 		super();
 		this.id = categoria.getId();
 		this.nome = categoria.getNome();
-		this.pai = categoria.getPai();
 	}
 
 	public String getId() {
@@ -40,13 +38,7 @@ public class CategoriaDTO  implements Serializable{
 		this.nome = nome;
 	}
 
-	public CategoriaResumoDTO getPai() {
-		return pai;
-	}
 
-	public void setPai(CategoriaResumoDTO pai) {
-		this.pai = pai;
-	}
 
 	@Override
 	public int hashCode() {
@@ -61,7 +53,7 @@ public class CategoriaDTO  implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CategoriaDTO other = (CategoriaDTO) obj;
+		CategoriaResumoDTO other = (CategoriaResumoDTO) obj;
 		return Objects.equals(id, other.id);
 	}
 	

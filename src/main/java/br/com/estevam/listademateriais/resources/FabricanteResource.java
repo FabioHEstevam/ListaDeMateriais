@@ -61,7 +61,7 @@ public class FabricanteResource {
 	}
 	
 	@RequestMapping(value="/{id}/materiais", method = RequestMethod.GET)
-	public ResponseEntity<List<Referencia>> findProjetos(@PathVariable String id){
+	public ResponseEntity<List<Referencia>> findMateriais(@PathVariable String id){
 		Fabricante obj = service.findById(id);
 		return ResponseEntity.ok().body(obj.getReferencias().stream().collect(Collectors.toList()));
 	}
