@@ -1,18 +1,14 @@
-package br.com.estevam.listademateriais.model;
+package br.com.estevam.listademateriais.dto;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import br.com.estevam.listademateriais.dto.AutorDTO;
+import br.com.estevam.listademateriais.model.ListaDeMateriais;
 
-@Document
-public class ListaDeMateriais implements Serializable{
+public class ListaDeMateriaisDTO implements Serializable{
 
 	private static final long serialVersionUID = 1l;
 	
@@ -21,19 +17,17 @@ public class ListaDeMateriais implements Serializable{
 	private String projeto;
 	private Date data;
 	private AutorDTO autor;
-	
-	private Set<ItemDaListaDeMateriais> lista = new HashSet<>();
-	
-	public ListaDeMateriais() {
+
+	public ListaDeMateriaisDTO() {
 		super();
 	}
 	
-	public ListaDeMateriais(String id, String projeto, Date data, AutorDTO autor) {
+	public ListaDeMateriaisDTO(ListaDeMateriais lista) {
 		super();
-		this.id = id;
-		this.projeto = projeto;
-		this.data = data;
-		this.autor = autor;
+		this.id = lista.getId();
+		this.projeto = lista.getProjeto();
+		this.data = lista.getData();
+		this.autor = lista.getAutor();
 	}
 
 	public String getId() {
@@ -68,14 +62,6 @@ public class ListaDeMateriais implements Serializable{
 		this.autor = autor;
 	}
 
-	public Set<ItemDaListaDeMateriais> getLista() {
-		return lista;
-	}
-
-	public void setLista(Set<ItemDaListaDeMateriais> lista) {
-		this.lista = lista;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -89,7 +75,7 @@ public class ListaDeMateriais implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ListaDeMateriais other = (ListaDeMateriais) obj;
+		ListaDeMateriaisDTO other = (ListaDeMateriaisDTO) obj;
 		return Objects.equals(id, other.id);
 	}
 	

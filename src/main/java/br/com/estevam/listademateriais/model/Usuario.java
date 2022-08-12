@@ -6,8 +6,9 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import br.com.estevam.listademateriais.dto.ListaDeMateriaisDTO;
 
 @Document
 public class Usuario implements Serializable{
@@ -19,8 +20,7 @@ public class Usuario implements Serializable{
 	private String nome;
 	private String email;
 	
-	@DBRef(lazy = true)
-	private Set<ListaDeMateriais> projetos = new HashSet<>();
+	private Set<ListaDeMateriaisDTO> projetos = new HashSet<>();
 	
 	public Usuario() {
 		super();
@@ -57,11 +57,11 @@ public class Usuario implements Serializable{
 		this.email = email;
 	}
 
-	public Set<ListaDeMateriais> getProjetos() {
+	public Set<ListaDeMateriaisDTO> getProjetos() {
 		return projetos;
 	}
 
-	public void setProjetos(Set<ListaDeMateriais> projetos) {
+	public void setProjetos(Set<ListaDeMateriaisDTO> projetos) {
 		this.projetos = projetos;
 	}
 

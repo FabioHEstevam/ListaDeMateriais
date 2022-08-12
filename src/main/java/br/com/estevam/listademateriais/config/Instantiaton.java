@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import br.com.estevam.listademateriais.dto.AutorDTO;
 import br.com.estevam.listademateriais.dto.CategoriaDTO;
 import br.com.estevam.listademateriais.dto.FabricanteDTO;
+import br.com.estevam.listademateriais.dto.ListaDeMateriaisDTO;
 import br.com.estevam.listademateriais.dto.MaterialDTO;
 import br.com.estevam.listademateriais.model.Categoria;
 import br.com.estevam.listademateriais.model.Fabricante;
@@ -117,6 +118,10 @@ public class Instantiaton implements CommandLineRunner{
 		lsm1.getLista().add(new ItemDaListaDeMateriais(ref3,1,un2));
 		
 		listaDeMateriaisRepository.save(lsm1);
+		
+		us1.getProjetos().add(new ListaDeMateriaisDTO(lsm1));
+		
+		usuarioRepository.save(us1);
 		
 	}
 
