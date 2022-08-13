@@ -9,7 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.estevam.listademateriais.dto.AutorDTO;
-import br.com.estevam.listademateriais.dto.CategoriaResumoDTO;
+import br.com.estevam.listademateriais.dto.CategoriaDTO;
 import br.com.estevam.listademateriais.dto.FabricanteDTO;
 import br.com.estevam.listademateriais.dto.ListaDeMateriaisDTO;
 import br.com.estevam.listademateriais.dto.MaterialDTO;
@@ -80,28 +80,26 @@ public class Instantiaton implements CommandLineRunner{
 		
 		categoriaRepository.save(cat1);
 		
-		Categoria cat2 = new Categoria(null, "Conectores", new CategoriaResumoDTO(cat1));
+		Categoria cat2 = new Categoria(null, "Conectores", new CategoriaDTO(cat1));
 		
 		categoriaRepository.save(cat2);
 		
-		cat1.getFilhos().add(new CategoriaResumoDTO(cat2));
+		cat1.getFilhos().add(cat2);
 		
 		categoriaRepository.save(cat1);
 		
 		Material mat1 = new Material(null,"Terminal de compressão 35 mm");
-		mat1.getCategorias().addAll(Arrays.asList(new CategoriaResumoDTO(cat1),new CategoriaResumoDTO(cat2)));
-		
-		
+		mat1.getCategorias().addAll(Arrays.asList(new CategoriaDTO(cat1),new CategoriaDTO(cat2)));
 		
 		Material mat2 = new Material(null,"Terminal pré isolado garfo vermelho");
-		mat2.getCategorias().addAll(Arrays.asList(new CategoriaResumoDTO(cat1),new CategoriaResumoDTO(cat2)));
+		mat2.getCategorias().addAll(Arrays.asList(new CategoriaDTO(cat1),new CategoriaDTO(cat2)));
 		
 		materialRepository.saveAll(Arrays.asList(mat1,mat2));
 		
-		cat1.getMateriais().addAll(Arrays.asList(mat1,mat2));
-		cat2.getMateriais().addAll(Arrays.asList(mat1,mat2));
+		//cat1.getMateriais().addAll(Arrays.asList(mat1,mat2));
+		//cat2.getMateriais().addAll(Arrays.asList(mat1,mat2));
 		
-		categoriaRepository.saveAll(Arrays.asList(cat1,cat2));
+		//categoriaRepository.saveAll(Arrays.asList(cat1,cat2));
 		
 		Referencia ref1 = new Referencia(new MaterialDTO(mat1),new FabricanteDTO(fab1),"A1");
 		mat1.getReferencias().add(ref1);

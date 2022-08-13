@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import br.com.estevam.listademateriais.dto.CategoriaResumoDTO;
+import br.com.estevam.listademateriais.dto.CategoriaDTO;
 
 @Document
 public class Categoria implements Serializable{
@@ -19,12 +19,11 @@ public class Categoria implements Serializable{
 	@Id
 	private String id;
 	private String nome;
-	private CategoriaResumoDTO pai;
-	private Set<CategoriaResumoDTO> filhos = new HashSet<>();
+	private CategoriaDTO pai;
 	
-	@DBRef(lazy = true)
-	private Set<Material> materiais = new HashSet<>();
-	
+	@DBRef
+	private Set<Categoria> filhos = new HashSet<>();
+
 	public Categoria() {
 		super();
 	}
@@ -36,7 +35,7 @@ public class Categoria implements Serializable{
 		this.pai = null;
 	}
 	
-	public Categoria(String id, String nome, CategoriaResumoDTO pai) {
+	public Categoria(String id, String nome, CategoriaDTO pai) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -59,28 +58,20 @@ public class Categoria implements Serializable{
 		this.nome = nome;
 	}
 
-	public CategoriaResumoDTO getPai() {
+	public CategoriaDTO getPai() {
 		return pai;
 	}
 
-	public void setPai(CategoriaResumoDTO pai) {
+	public void setPai(CategoriaDTO pai) {
 		this.pai = pai;
 	}
 
-	public Set<CategoriaResumoDTO> getFilhos() {
+	public Set<Categoria> getFilhos() {
 		return filhos;
 	}
 
-	public void setFilhos(Set<CategoriaResumoDTO> filhos) {
+	public void setFilhos(Set<Categoria> filhos) {
 		this.filhos = filhos;
-	}
-
-	public Set<Material> getMateriais() {
-		return materiais;
-	}
-
-	public void setMateriais(Set<Material> materiais) {
-		this.materiais = materiais;
 	}
 
 	@Override

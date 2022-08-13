@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.estevam.listademateriais.dto.CategoriaResumoDTO;
 import br.com.estevam.listademateriais.dto.CategoriaDTO;
 import br.com.estevam.listademateriais.model.Categoria;
-import br.com.estevam.listademateriais.model.Material;
 import br.com.estevam.listademateriais.services.CategoriaService;
 
 @RestController
@@ -27,9 +25,9 @@ public class CategoriaResource {
 	private CategoriaService service;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<CategoriaResumoDTO>> findAll(){
+	public ResponseEntity<List<CategoriaDTO>> findAll(){
 		List<Categoria> list = service.findAll();
-		List<CategoriaResumoDTO> listDTO = list.stream().map(x->new CategoriaResumoDTO(x)).collect(Collectors.toList());
+		List<CategoriaDTO> listDTO = list.stream().map(x->new CategoriaDTO(x)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
 	
@@ -62,15 +60,9 @@ public class CategoriaResource {
 	}
 	
 	@RequestMapping(value="/{id}/subcategorias", method = RequestMethod.GET)
-	public ResponseEntity<List<CategoriaResumoDTO>> findSubcategorias(@PathVariable String id){
+	public ResponseEntity<List<Categoria>> findSubcategorias(@PathVariable String id){
 		Categoria obj = service.findById(id);
 		return ResponseEntity.ok().body(obj.getFilhos().stream().collect(Collectors.toList()));
-	}
-	
-	@RequestMapping(value="/{id}/materiais", method = RequestMethod.GET)
-	public ResponseEntity<List<Material>> findMateriais(@PathVariable String id){
-		Categoria obj = service.findById(id);
-		return ResponseEntity.ok().body(obj.getMateriais().stream().collect(Collectors.toList()));
 	}
 	
 }

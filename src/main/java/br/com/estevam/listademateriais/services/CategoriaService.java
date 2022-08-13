@@ -6,10 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.estevam.listademateriais.dto.CategoriaResumoDTO;
 import br.com.estevam.listademateriais.dto.CategoriaDTO;
 import br.com.estevam.listademateriais.model.Categoria;
 import br.com.estevam.listademateriais.repository.CategoriaRepository;
+import br.com.estevam.listademateriais.services.exception.ObjectNotFoundException;
 import br.com.estevam.listademateriais.services.exception.OperationException;
 
 @Service
@@ -24,16 +24,16 @@ public class CategoriaService {
 	
 	public Categoria findById(String id) {
 		Optional<Categoria> obj = repo.findById(id);
-		return obj.orElse(null);
+		return obj.orElseThrow(()->new ObjectNotFoundException("Categoria não encontrada"));
 	}
 	
 	public Categoria insert(Categoria obj) {
-		Categoria pai = findById(obj.getPai().getId());
+		Categoria pai = repo.findById(obj.getPai().getId()).orElse(null);
 		obj.setPai(null);
 		obj = repo.insert(obj);
 		if(pai!=null) {
-				pai.getFilhos().add(new CategoriaResumoDTO(obj));
-				obj.setPai(new CategoriaResumoDTO(pai));
+				pai.getFilhos().add(obj);
+				obj.setPai(new CategoriaDTO(pai));
 				repo.save(pai);
 				repo.save(obj);
 		}
@@ -45,13 +45,10 @@ public class CategoriaService {
 		if(!obj.getFilhos().isEmpty()) {
 			throw new OperationException("A categoria não pode ser deletada pois possui categorias associados a ela");
 		}
-		if(!obj.getMateriais().isEmpty()) {
-			throw new OperationException("A categoria não pode ser deletada pois possui materiais associados a ela");
-		}
 		if(obj.getPai()!=null) {
-			Categoria pai = findById(obj.getPai().getId());
+			Categoria pai = repo.findById(obj.getPai().getId()).orElse(null);
 			if(pai!=null) {
-				pai.getFilhos().remove(new CategoriaResumoDTO(obj));
+				pai.getFilhos().remove(obj);
 				repo.save(pai);
 			}
 			
@@ -66,21 +63,21 @@ public class CategoriaService {
 	}
 	
 	public void updateDate(Categoria newObj, Categoria obj) {
-		Categoria pai = findById(newObj.getPai().getId());
-		Categoria newPai = findById(obj.getPai().getId());
+		Categoria pai = repo.findById(newObj.getPai().getId()).orElse(null);
+		Categoria newPai = repo.findById(obj.getPai().getId()).orElse(null);
 		if(newPai!=null) {
 			if(pai!=null) {
-				pai.getFilhos().remove(new CategoriaResumoDTO(newObj));
+				pai.getFilhos().remove(newObj);
 				repo.save(pai);
 			}
-			newObj.setPai(new CategoriaResumoDTO (newPai));
-			newPai.getFilhos().add(new CategoriaResumoDTO(newObj));
+			newObj.setPai(new CategoriaDTO (newPai));
+			newPai.getFilhos().add(newObj);
 			repo.save(newPai);
 		}
 		newObj.setNome(obj.getNome());
 	}
 	
 	public Categoria fromDTO(CategoriaDTO objDto){
-		return new Categoria(objDto.getId(),objDto.getNome(),objDto.getPai());
+		return new Categoria(objDto.getId(),objDto.getNome());
 	}
 }

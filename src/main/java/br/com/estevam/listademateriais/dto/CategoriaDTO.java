@@ -11,7 +11,7 @@ public class CategoriaDTO  implements Serializable{
 	
 	private String id;
 	private String nome;
-	private CategoriaResumoDTO pai;
+	//private CategoriaDTO pai;
 	
 	public CategoriaDTO() {
 		super();
@@ -21,7 +21,7 @@ public class CategoriaDTO  implements Serializable{
 		super();
 		this.id = categoria.getId();
 		this.nome = categoria.getNome();
-		this.pai = categoria.getPai();
+		//this.pai = categoria.getPai();
 	}
 
 	public String getId() {
@@ -39,15 +39,15 @@ public class CategoriaDTO  implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public CategoriaResumoDTO getPai() {
+/*
+	public CategoriaDTO getPai() {
 		return pai;
 	}
 
-	public void setPai(CategoriaResumoDTO pai) {
+	public void setPai(CategoriaDTO pai) {
 		this.pai = pai;
 	}
-
+*/
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

@@ -10,7 +10,7 @@ import java.util.Set;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import br.com.estevam.listademateriais.dto.CategoriaResumoDTO;
+import br.com.estevam.listademateriais.dto.CategoriaDTO;
 
 @Document
 public class Material implements Serializable{
@@ -20,7 +20,8 @@ public class Material implements Serializable{
 	@Id
 	private String id;
 	private String descricao;
-	private Set<CategoriaResumoDTO> categorias = new HashSet<>();
+	
+	private Set<CategoriaDTO> categorias = new HashSet<>();
 	
 	private List<Referencia> referencias = new ArrayList<>();
 	
@@ -50,11 +51,11 @@ public class Material implements Serializable{
 		this.descricao = descricao;
 	}
 
-	public Set<CategoriaResumoDTO> getCategorias() {
+	public Set<CategoriaDTO> getCategorias() {
 		return categorias;
 	}
 
-	public void setCategorias(Set<CategoriaResumoDTO> categorias) {
+	public void setCategorias(Set<CategoriaDTO> categorias) {
 		this.categorias = categorias;
 	}
 
