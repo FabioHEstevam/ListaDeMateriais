@@ -118,8 +118,8 @@ public class Instantiaton implements CommandLineRunner{
 		ListaDeMateriais lsm1 = new ListaDeMateriais(null, "Painel elétrico", sdf.parse("11/08/2022"),new AutorDTO(us1));
 		listaDeMateriaisRepository.save(lsm1);
 		
-		lsm1.getLista().add(new ItemDaListaDeMateriais(ref1,10,un1));
-		lsm1.getLista().add(new ItemDaListaDeMateriais(ref3,1,un2));
+		lsm1.getLista().add(new ItemDaListaDeMateriais(ref1,un1,10));
+		lsm1.getLista().add(new ItemDaListaDeMateriais(ref3,un2,1));
 		
 		listaDeMateriaisRepository.save(lsm1);
 		

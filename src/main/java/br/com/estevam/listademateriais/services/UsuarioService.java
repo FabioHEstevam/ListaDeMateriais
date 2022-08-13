@@ -15,7 +15,7 @@ import br.com.estevam.listademateriais.services.exception.ObjectNotFoundExceptio
 public class UsuarioService {
 	
 	@Autowired
-	UsuarioRepository repo;
+	private UsuarioRepository repo;
 	
 	public List<Usuario> findAll(){
 		return repo.findAll();

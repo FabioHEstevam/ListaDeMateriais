@@ -16,7 +16,7 @@ import br.com.estevam.listademateriais.services.exception.OperationException;
 public class CategoriaService {
 
 	@Autowired
-	CategoriaRepository repo;
+	private CategoriaRepository repo;
 	
 	public List<Categoria> findAll(){
 		return repo.findAll();
@@ -50,19 +50,19 @@ public class CategoriaService {
 			if(pai!=null) {
 				pai.getFilhos().remove(obj);
 				repo.save(pai);
-			}
-			
+			}	
 		}
 		repo.delete(obj);
 	}
 	
 	public Categoria update(Categoria obj) {
 		Categoria newObj = findById(obj.getId());
-		updateDate(newObj, obj);
+		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
 	
-	public void updateDate(Categoria newObj, Categoria obj) {
+	public void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
 		Categoria pai = repo.findById(newObj.getPai().getId()).orElse(null);
 		Categoria newPai = repo.findById(obj.getPai().getId()).orElse(null);
 		if(newPai!=null) {
@@ -74,7 +74,6 @@ public class CategoriaService {
 			newPai.getFilhos().add(newObj);
 			repo.save(newPai);
 		}
-		newObj.setNome(obj.getNome());
 	}
 	
 	public Categoria fromDTO(CategoriaDTO objDto){

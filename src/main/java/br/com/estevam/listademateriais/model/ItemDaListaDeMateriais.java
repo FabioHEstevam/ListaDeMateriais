@@ -15,7 +15,14 @@ public class ItemDaListaDeMateriais implements Serializable{
 		super();
 	}
 
-	public ItemDaListaDeMateriais(Referencia referencia, Integer quantidade, Unidade unidade) {
+	public ItemDaListaDeMateriais(Referencia referencia, Unidade unidade) {
+		super();
+		this.referencia = referencia;
+		this.quantidade = 0;
+		this.unidade = unidade;
+	}
+	
+	public ItemDaListaDeMateriais(Referencia referencia, Unidade unidade, Integer quantidade) {
 		super();
 		this.referencia = referencia;
 		this.quantidade = quantidade;
@@ -48,7 +55,7 @@ public class ItemDaListaDeMateriais implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(referencia);
+		return Objects.hash(referencia, unidade);
 	}
 
 	@Override
@@ -60,10 +67,7 @@ public class ItemDaListaDeMateriais implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		ItemDaListaDeMateriais other = (ItemDaListaDeMateriais) obj;
-		return Objects.equals(referencia, other.referencia);
+		return Objects.equals(referencia, other.referencia) && Objects.equals(unidade, other.unidade);
 	}
-	
-	
-	
 	
 }

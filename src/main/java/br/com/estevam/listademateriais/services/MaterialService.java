@@ -19,7 +19,7 @@ import br.com.estevam.listademateriais.services.exception.ObjectNotFoundExceptio
 public class MaterialService {
 
 	@Autowired
-	MaterialRepository repo;
+	private MaterialRepository repo;
 	
 	@Autowired
 	FabricanteRepository fabricanteRepository;
