@@ -28,12 +28,15 @@ public class CategoriaService {
 	}
 	
 	public Categoria insert(Categoria obj) {
-		Categoria pai = repo.findById(obj.getPai().getId()).orElse(null);
+		Categoria pai = null;
+		if(obj.getPai()!=null) {
+			pai = repo.findById(obj.getPai().getId()).orElse(null);
+		}
 		obj.setPai(null);
 		obj = repo.insert(obj);
 		if(pai!=null) {
 				pai.getFilhos().add(obj);
-				obj.setPai(new CategoriaDTO(pai));
+				obj.setPai(pai);
 				repo.save(pai);
 				repo.save(obj);
 		}
@@ -63,20 +66,37 @@ public class CategoriaService {
 	
 	public void updateData(Categoria newObj, Categoria obj) {
 		newObj.setNome(obj.getNome());
-		Categoria pai = repo.findById(newObj.getPai().getId()).orElse(null);
-		Categoria newPai = repo.findById(obj.getPai().getId()).orElse(null);
+		Categoria pai = null;
+		if(newObj.getPai()!=null) {
+			pai = repo.findById(newObj.getPai().getId()).orElse(null);
+		}
+		Categoria newPai = null;
+		if(obj.getPai()!=null) {
+			newPai = repo.findById(obj.getPai().getId()).orElse(null);
+		}
+
+		if(pai!=null) {
+			pai.getFilhos().remove(newObj);
+			repo.save(pai);
+		}
+		newObj.setPai(newPai);
 		if(newPai!=null) {
-			if(pai!=null) {
-				pai.getFilhos().remove(newObj);
-				repo.save(pai);
-			}
-			newObj.setPai(new CategoriaDTO (newPai));
 			newPai.getFilhos().add(newObj);
 			repo.save(newPai);
 		}
+		
 	}
 	
 	public Categoria fromDTO(CategoriaDTO objDto){
+		if (objDto.getPai()!=null){
+			try{
+				Categoria pai = findById(objDto.getPai());
+				return new Categoria(objDto.getId(),objDto.getNome(),pai);
+			}
+			catch (ObjectNotFoundException e) {
+				objDto.setPai(null);
+			}
+		}
 		return new Categoria(objDto.getId(),objDto.getNome());
 	}
 }

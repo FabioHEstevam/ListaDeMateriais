@@ -2,10 +2,8 @@ package br.com.estevam.listademateriais.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,7 +19,7 @@ public class Material implements Serializable{
 	private String id;
 	private String descricao;
 	
-	private Set<CategoriaDTO> categorias = new HashSet<>();
+	private List<CategoriaDTO> categorias = new ArrayList<>();
 	
 	private List<Referencia> referencias = new ArrayList<>();
 	
@@ -51,11 +49,11 @@ public class Material implements Serializable{
 		this.descricao = descricao;
 	}
 
-	public Set<CategoriaDTO> getCategorias() {
+	public List<CategoriaDTO> getCategorias() {
 		return categorias;
 	}
 
-	public void setCategorias(Set<CategoriaDTO> categorias) {
+	public void setCategorias(List<CategoriaDTO> categorias) {
 		this.categorias = categorias;
 	}
 
@@ -83,5 +81,13 @@ public class Material implements Serializable{
 		Material other = (Material) obj;
 		return Objects.equals(id, other.id);
 	}
+
+	@Override
+	public String toString() {
+		return "Material [id=" + id + ", descricao=" + descricao + ", categorias=" + categorias + ", referencias="
+				+ referencias + "]";
+	}
+	
+	
 	
 }

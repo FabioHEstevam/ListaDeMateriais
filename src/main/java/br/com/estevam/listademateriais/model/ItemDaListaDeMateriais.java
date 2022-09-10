@@ -55,7 +55,7 @@ public class ItemDaListaDeMateriais implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(referencia, unidade);
+		return Objects.hash(referencia.getMaterial().getId(),referencia.getFabricante().getId(),referencia.getReferencia(), unidade.getId());
 	}
 
 	@Override

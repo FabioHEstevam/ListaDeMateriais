@@ -26,17 +26,24 @@ public class UsuarioService {
 		return obj.orElseThrow(()->new ObjectNotFoundException("Usuário não encontrado"));
 	}
 	
+	public Usuario findByEmail(String email) {
+		Usuario obj = repo.findByEmail(email);
+		return obj;
+	}
+	
 	public Usuario insert(Usuario obj) {
 		return repo.insert(obj);
 	}
 	
 	public Usuario fromDTO(UsuarioDTO objDto){
-		return new Usuario(objDto.getId(),objDto.getNome(),objDto.getEmail());
+		return new Usuario(objDto.getId(),objDto.getNome(),objDto.getEmail(),null);
 	}
 	
 	public void delete(String id) {
-		findById(id);
-		repo.deleteById(id);
+		if(findAll().size()>1) {
+			findById(id);
+			repo.deleteById(id);
+		}
 	}
 	
 	public Usuario update(Usuario obj) {

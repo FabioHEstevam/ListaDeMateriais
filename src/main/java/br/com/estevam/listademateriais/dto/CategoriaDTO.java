@@ -11,17 +11,27 @@ public class CategoriaDTO  implements Serializable{
 	
 	private String id;
 	private String nome;
-	//private CategoriaDTO pai;
+	private String pai;
 	
 	public CategoriaDTO() {
 		super();
+	}
+	
+	public CategoriaDTO(String id) {
+		super();
+		this.id=id;
 	}
 	
 	public CategoriaDTO(Categoria categoria) {
 		super();
 		this.id = categoria.getId();
 		this.nome = categoria.getNome();
-		//this.pai = categoria.getPai();
+		if(categoria.getPai()!=null) {
+			this.pai = categoria.getPai().getId();
+		}
+		else {
+			this.pai = null;
+		}
 	}
 
 	public String getId() {
@@ -39,15 +49,15 @@ public class CategoriaDTO  implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-/*
-	public CategoriaDTO getPai() {
+
+	public String getPai() {
 		return pai;
 	}
 
-	public void setPai(CategoriaDTO pai) {
-		this.pai = pai;
+	public void setPai(Categoria pai) {
+		this.pai = pai.getId();
 	}
-*/
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -64,5 +74,12 @@ public class CategoriaDTO  implements Serializable{
 		CategoriaDTO other = (CategoriaDTO) obj;
 		return Objects.equals(id, other.id);
 	}
+
+	@Override
+	public String toString() {
+		return "CategoriaDTO [id=" + id + ", nome=" + nome + ", pai=" + pai + "]";
+	}
+	
+	
 	
 }

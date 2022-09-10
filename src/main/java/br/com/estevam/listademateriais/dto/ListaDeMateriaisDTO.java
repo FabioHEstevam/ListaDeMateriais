@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import br.com.estevam.listademateriais.model.ListaDeMateriais;
 
@@ -15,6 +16,7 @@ public class ListaDeMateriaisDTO implements Serializable{
 	@Id
 	private String id;
 	private String projeto;
+	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date data;
 	private AutorDTO autor;
 

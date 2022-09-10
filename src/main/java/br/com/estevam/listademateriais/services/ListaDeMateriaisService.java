@@ -67,7 +67,8 @@ public class ListaDeMateriaisService {
 	
 	public ListaDeMateriais update(ListaDeMateriais obj) {
 		ListaDeMateriais newObj = findById(obj.getId());
-		updateData(newObj,obj);		
+		updateData(newObj,obj);	
+		
 		return repo.save(newObj);
 	}
 	
@@ -75,6 +76,8 @@ public class ListaDeMateriaisService {
 		
 		newObj.setProjeto(obj.getProjeto());
 		newObj.setData(obj.getData());
+		newObj.setLista(obj.getLista());
+		
 		
 		Usuario autor = null;
 		

@@ -19,7 +19,7 @@ import br.com.estevam.listademateriais.model.ListaDeMateriais;
 import br.com.estevam.listademateriais.services.ListaDeMateriaisService;
 
 @RestController
-@RequestMapping(value="/lista-de-materiais")
+@RequestMapping(value="REST/lista-de-materiais")
 public class ListaDeMateriaisResource {
 
 	@Autowired

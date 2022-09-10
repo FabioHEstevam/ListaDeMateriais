@@ -19,7 +19,7 @@ import br.com.estevam.listademateriais.model.Usuario;
 import br.com.estevam.listademateriais.services.UsuarioService;
 
 @RestController
-@RequestMapping(value="/usuarios")
+@RequestMapping(value="REST/usuarios")
 public class UsuarioResource {
 	
 	@Autowired

@@ -1,11 +1,14 @@
 package br.com.estevam.listademateriais.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.estevam.listademateriais.dto.CategoriaDTO;
 import br.com.estevam.listademateriais.dto.FabricanteDTO;
 import br.com.estevam.listademateriais.dto.MaterialDTO;
 import br.com.estevam.listademateriais.model.Fabricante;
@@ -24,13 +27,21 @@ public class MaterialService {
 	@Autowired
 	FabricanteRepository fabricanteRepository;
 	
-	public List<Material> findalAll(){
+	@Autowired
+	FabricanteService fabricanteService;
+	
+	public List<Material> findAll(){
 		return repo.findAll();
 	}
 	
 	public Material findById(String id) {
 		Optional<Material> obj = repo.findById(id);
 		return obj.orElseThrow(()->new ObjectNotFoundException("Material não encontrado"));
+	}
+	
+	public List<Material> findByCategorias(List<CategoriaDTO> categorias) {
+
+		return findAll().stream().filter(x->x.getCategorias().containsAll(categorias)).collect(Collectors.toList());
 	}
 	
 	public Material insert(Material obj) {
@@ -52,8 +63,36 @@ public class MaterialService {
 		return repo.save(newObj);
 	}
 	
-	public void updateData(Material newObj, Material obj) {
+	public void updateData(Material newObj, Material obj) {	
 		newObj.setDescricao(obj.getDescricao());
+		newObj.setCategorias(obj.getCategorias());
+	}
+	
+	public void setReferencias(Material mat,List<Referencia> referencias) {
+		Material material = findById(mat.getId());
+		referencias.forEach(x->x.setMaterial(new MaterialDTO(material)));
+		List<Referencia> remover = new ArrayList<>();
+		List<Referencia> adicionar = new ArrayList<>();
+		
+		for(Referencia i: material.getReferencias()) {
+			for(Referencia j : referencias) {
+				if(i.equals(j)) {
+					break;
+				}
+			}
+			remover.add(i);
+		}
+		for(Referencia j : referencias) {
+			for(Referencia i: material.getReferencias()){
+				if(i.equals(j)) {
+					break;
+				}
+			}
+			adicionar.add(j);
+		}
+
+		remover.forEach(x->removeReferencia(x));
+		adicionar.forEach(x->addReferencia(material,fabricanteService.fromDTO(x.getFabricante()), x.getReferencia()));
 	}
 	
 	public Material fromDTO(MaterialDTO objDTO) {

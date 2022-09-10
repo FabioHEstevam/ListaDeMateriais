@@ -20,7 +20,7 @@ import br.com.estevam.listademateriais.model.Referencia;
 import br.com.estevam.listademateriais.services.MaterialService;
 
 @RestController
-@RequestMapping(value="/materiais")
+@RequestMapping(value="REST/materiais")
 public class MaterialResource {
 
 	@Autowired
@@ -28,7 +28,7 @@ public class MaterialResource {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<MaterialDTO>> findAll(){
-		List<Material> list = service.findalAll();
+		List<Material> list = service.findAll();
 		List<MaterialDTO> listDTO = list.stream().map(x->new MaterialDTO(x)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}

@@ -22,6 +22,11 @@ public class FabricanteDTO implements Serializable{
 		this.nome = fabricante.getNome();
 	}
 
+	public FabricanteDTO(String id) {
+		super();
+		this.id = id;
+	}
+	
 	public String getId() {
 		return id;
 	}

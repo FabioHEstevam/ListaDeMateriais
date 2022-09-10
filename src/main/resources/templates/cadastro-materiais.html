@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="htt://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" lang="pt-br">
+        <title> Lista de Materiais - Cadastro de Materiais</title>
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+	    
+	    <!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+		<!-- Include Date Range Picker -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+	    
+	    <!-- Include Select2 -->
+	    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+		<script>
+			$(document).ready(function() {
+			    $('.js-example-basic-multiple').select2();
+			    
+			    $('.eBtn').on('click',function(event){ 
+					event.preventDefault();
+					var href = $(this).attr('href');
+					$.get(href);
+					$(this).closest("tr").remove();
+				});
+				
+			});
+			
+			
+		</script>
+	</head>
+	<body>
+	
+		<header id="hostTag" th:include="header::header1"></header>
+	
+		<div class="container col-sm12 col-md-6 col-md-offset-2">
+	        <form id="main" action="salvar" method="post">
+	            <br>
+	            <h3>Cadastro de Materiais</h3>
+	            <br>
+	            
+	            <input type="hidden" th:field="*{material.id}" id="id">
+	            
+	            <div class="form-group">
+	                <label for="descricao">Descrição: </label><br>
+	                <input type="text" id="descricao" placeholder="Descrição" class="form-control"  th:field="*{material.descricao}"/>
+				</div>
+				
+				<div class="form-group">
+					<label for="categorias">Categorias: </label><br>
+		            <select class="form-control js-example-basic-multiple" name="categorias" multiple="multiple">
+					  <option th:each="cont : ${lista}" th:value="${cont.id}" th:text="${cont.nome}"  th:field="*{material.categorias}"> </option>
+					</select>
+				</div>
+			
+				<h4>Referências</h4>
+
+					<table class="table">
+						  <thead class="thead-dark">
+						    <tr>
+						      <th scope="col">Fabricante</th>
+						      <th scope="col">Referencia</th>
+						      <th scope="col">Ações</th>
+						    </tr>
+						  </thead>
+						  
+						  <tbody>
+						    <tr th:each="ref,refStat : ${material.referencias}">
+						    	<td  th:text="${ref.fabricante.nome}"> </td>
+						    	<td  th:text="${ref.referencia}"> </td>
+						    	<td> 
+						    		<a type="submit" class="btn btn-danger eBtn" th:href="@{remover(index=${refStat.index})}"> Remover </a>
+						    	</td>
+						    </tr>
+						    <tr>
+						    	<td> 
+							    	<select class="form-control" name="fabricantes" th:field="${referencia.fabricante}">
+							    		<option th:each="fab : ${fabricantes}" th:value="${fab.id}" th:text="${fab.nome}"> </option>
+							    	</select>
+						    	</td>
+						    	<td>
+						    		<input type="text" class="form-control" th:field="${referencia.referencia}">
+						    	</td>
+						    	<td>
+						    		<input type="submit" class="btn btn-success"  name="action" value="Adicionar">
+						    	</td>
+						    </tr>
+						  </tbody>
+					</table>
+
+	            <div class="form-group">
+	            	<input type="submit" name="action" value="Salvar">
+	            </div>
+	            
+	        </form>
+		</div>
+    </body>
+</html>

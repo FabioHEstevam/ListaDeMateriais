@@ -21,8 +21,8 @@ public class Fabricante implements Serializable{
 	
 	public Fabricante() {
 		super();
-	}
-
+	}	
+ 
 	public Fabricante(String id, String nome) {
 		super();
 		this.id = id;

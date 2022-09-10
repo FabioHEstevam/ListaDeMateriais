@@ -18,7 +18,7 @@ import br.com.estevam.listademateriais.model.Categoria;
 import br.com.estevam.listademateriais.services.CategoriaService;
 
 @RestController
-@RequestMapping(value="/categorias")
+@RequestMapping(value="REST/categorias")
 public class CategoriaResource {
 
 	@Autowired

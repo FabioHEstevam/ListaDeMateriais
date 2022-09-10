@@ -3,9 +3,14 @@ package br.com.estevam.listademateriais.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import br.com.estevam.listademateriais.dto.FabricanteDTO;
 import br.com.estevam.listademateriais.dto.MaterialDTO;
 
+@Component
+@Scope("session")
 public class Referencia implements Serializable{
 
 	private static final long serialVersionUID = 1l;

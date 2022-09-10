@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="htt://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" lang="pt-br">
+        <title> Lista de Materiais - Cadastro de Usuário</title>
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+	    
+	    <!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+		<!-- Include Date Range Picker -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+	    
+	</head>
+	<body>
+	
+		<header id="hostTag" th:include="header::header1"></header>
+	
+		<div class="container col-sm12 col-md-6 col-md-offset-2">
+	        <form action="salvar" th:object="${usuario}" method="post">
+	            <br>
+	            <h3>Cadastro de Usuário</h3>
+	            <br>
+	            
+	            <input type="hidden" th:field="*{id}" id="id">
+	            
+	            <div class="form-group">
+	                <label for="nome">Nome: </label><br>
+	                <input type="text" id="nome" placeholder="Nome" class="form-control" th:field="*{nome}">
+				</div>
+				<div class="form-group">
+	                <label for="telefone" >Telefone: </label><br>
+	                <input type="text" id="telefone" placeholder="(00) 00000-0000" class="form-control" th:field="*{telefone}">
+	            </div>
+	            <div class="form-group">
+	                <label for="email" >E-mail: </label><br>
+	                <input type="text" id="email" placeholder="nome@email.com.br" class="form-control" th:field="*{email}">
+	            </div>
+	            <div class="form-group">
+	                <label for="senha" >Senha: </label><br>
+	                <input type="password" id="senha" class="form-control" th:field="*{senha}">
+	            </div>
+	  
+	            <div class="form-group">
+	            	<input type="submit" value="Salvar">
+	            </div>
+	        </form>
+		</div>
+    </body>
+</html>

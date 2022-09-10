@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" lang="pt-br">
+        <title> Lista de Materiais</title>
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+	    
+	    <!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+		<!-- Include Date Range Picker -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+		
+		<script>
+		    $(document).ready(function(){
+		        var date_input=$('input[name="data"]'); //our date input has the name "date"
+		        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+		        date_input.datepicker({
+		            format: 'dd/mm/yyyy',
+		            container: container,
+		            todayHighlight: true,
+		            autoclose: true,
+		        })
+		    })
+		</script>
+	
+		<style>
+			.largura-100 {
+			    width: 100%;
+			}
+			.form-login {
+			    width: 300px;
+			    position: absolute;
+			    top: 25%;
+			    left: 50%;
+			    transform: translate(-50%,-50%);
+			}
+			.form-style {
+			    background-color: rgb(240, 233, 233);
+			    border-radius: 15px;
+			    padding: 10px;
+			    margin-left: auto;
+			    margin-top: auto;
+			    margin-right: auto;
+			    margin-bottom: auto;
+			}
+		</style>
+	
+	</head>
+	
+	<body>
+		<form class="form-style form-login" action="/login" method="post" th:object="${usuario}">
+            
+            <div class="form-group">
+                <label for="usuario" class="form-label">E-mail: </label><br>
+                <input type="text" id="usuario" name="usuario" placeholder="fulano@email.com.br" class="form-control" th:field="*{email}">
+            </div>
+            <div class="form-group">
+	            <label for="senha"class="form-label">Senha: </label><br>
+	            <input type="password" id="senha" name="senha" class="form-control" th:field="*{senha}">
+            </div>
+            <input type="submit" value="Entrar" class="btn btn-success largura-100">
+            <div class="alert alert-primary" role="alert" th:text="${error}" th:if="${error}"></div>
+        </form>
+		
+    </body>
+</html>

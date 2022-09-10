@@ -19,7 +19,7 @@ import br.com.estevam.listademateriais.model.Referencia;
 import br.com.estevam.listademateriais.services.FabricanteService;
 
 @RestController
-@RequestMapping(value="/fabricantes")
+@RequestMapping(value="REST/fabricantes")
 public class FabricanteResource {
 	
 	@Autowired

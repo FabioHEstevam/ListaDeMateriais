@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import br.com.estevam.listademateriais.dto.ListaDeMateriaisDTO;
@@ -18,7 +19,10 @@ public class Usuario implements Serializable{
 	@Id
 	private String id;
 	private String nome;
+	@Indexed(unique = true)
 	private String email;
+	private String telefone;
+	private String senha;
 	
 	private Set<ListaDeMateriaisDTO> projetos = new HashSet<>();
 	
@@ -26,11 +30,22 @@ public class Usuario implements Serializable{
 		super();
 	}
 
-	public Usuario(String id, String nome, String email) {
+	public Usuario(String id, String nome, String telefone, String email) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.telefone = telefone;
 		this.email = email;
+		this.senha = "123";
+	}
+	
+	public Usuario(String id, String nome, String telefone, String email, String senha) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.telefone = telefone;
+		this.email = email;
+		this.senha = senha;
 	}
 
 	public String getId() {
@@ -49,12 +64,28 @@ public class Usuario implements Serializable{
 		this.nome = nome;
 	}
 
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+	
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public Set<ListaDeMateriaisDTO> getProjetos() {
@@ -82,4 +113,10 @@ public class Usuario implements Serializable{
 		return Objects.equals(id, other.id);
 	}
 
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nome=" + nome +", telefone=" + telefone + ", email=" + email +  "]";
+	}
+
+	
 }

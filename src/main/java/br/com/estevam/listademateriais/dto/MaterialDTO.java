@@ -20,6 +20,11 @@ public class MaterialDTO implements Serializable{
 		this.id = material.getId();
 		this.descricao = material.getDescricao();
 	}
+	
+	public MaterialDTO(String id) {
+		super();
+		this.id = id;
+	}
 
 	public String getId() {
 		return id;

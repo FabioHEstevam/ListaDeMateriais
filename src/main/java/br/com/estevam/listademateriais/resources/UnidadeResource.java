@@ -16,7 +16,7 @@ import br.com.estevam.listademateriais.model.Unidade;
 import br.com.estevam.listademateriais.services.UnidadeService;
 
 @RestController
-@RequestMapping(value="/unidades")
+@RequestMapping(value="REST/unidades")
 public class UnidadeResource {
 	
 	@Autowired

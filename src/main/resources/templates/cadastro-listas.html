@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="htt://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" lang="pt-br">
+	<title> Lista de Materiais - Cadastro de Materiais</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<!-- Include Date Range Picker -->
+	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+
+	<!-- Include Select2 -->
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<script>
+		$(document).ready(function () {
+
+			var oldItem = new Object();
+
+			$('.js-example-basic-multiple').select2({width: '100%'});
+
+			$('.eBtn').on('click', function (event) {
+				$('.myForm #exampleModal').modal();
+				resetCategorias().then(x => {
+					oldItem = new Object();
+					$('#material').val([]);
+					$('#fabricante').val([]);
+					$('#referencia').val([]);
+					$('#quantidade').val(0);
+					$('#unidade').val([]);
+				})
+			});
+
+			$('.myForm #categorias').on('change', function (event) {
+				event.preventDefault();
+				var data = $('#categorias option:selected').toArray().map(item => item.value);
+				updateMateriais(data).then(x => $('#material').trigger('change'));
+
+			});
+
+			$('.myForm #material').on('change', function (event) {
+				event.preventDefault();
+				updateFabricantes($('#material').children('option:selected').val()).then(x => $('#fabricante').trigger('change'));
+
+			});
+
+			$('.myForm #fabricante').on('change', function (event) {
+				event.preventDefault();
+				updateReferencias($('#material').children('option:selected').val(), $('#fabricante').children("option:selected").val());
+			});
+
+			function updateMateriais(lista) {
+				return new Promise(function (resolve) {
+					var json = JSON.stringify(lista);
+					$.post("filtrar", json, function (materiais) {
+						$('#material').find('option').remove();
+						for (var index = 0; index < materiais.length; index++) {
+							$('#material').append('<option value="' + materiais[index]?.id + '">' + materiais[index]?.descricao + '</option>');
+						}
+						return resolve('ok');
+					});
+				})
+			}
+
+			function updateFabricantes(material) {
+				return new Promise(function (resolve) {
+					var href = "referencias?id=" + material;
+					$.get(href, function (referencias) {
+						$('#fabricante').find('option').remove();
+						for (var index = 0; index < referencias.length; index++) {
+							$('#fabricante').append('<option value="' + referencias[index]?.fabricante?.id + '">' + referencias[index]?.fabricante.nome + '</option>');
+						}
+						return resolve('ok');
+					})
+				})
+			}
+
+			function updateReferencias(material, fabricante) {
+				return new Promise(function (resolve) {
+					var href = "referencias?id=" + material;
+					$.get(href, function (referencias) {
+						$('#referencia').find('option').remove();
+						for (var index = 0; index < referencias.length; index++) {
+							if (fabricante == referencias[index]?.fabricante?.id) {
+								$('#referencia').append('<option value="' + referencias[index]?.referencia + '">' + referencias[index]?.referencia + '</option>');
+							}
+						}
+						return resolve('ok');
+					})
+				})
+			}
+
+			$('#btn1').on('click', function (event) {
+				event.preventDefault();
+
+				if ($('#referencia').children('option:selected').val() == undefined) {
+					alert("Selecione uma referência")
+				}
+
+				else {
+					if ($('#quantidade').val() == '') {
+						alert("A quantidade não pode ser 0")
+					} else {
+						let fonte = $('#referencia').children('option:selected').val().split(",")
+						var item = new Object();
+						item.referencia = new Object();
+						item.referencia.material = new Object();
+						item.referencia.material.id = $('#material').children('option:selected').val();
+						item.referencia.fabricante = new Object();
+						item.referencia.fabricante.id = $('#fabricante').children('option:selected').val();
+						item.referencia.referencia = $('#referencia').children('option:selected').val();
+						item.quantidade = parseInt($('#quantidade').val());
+						item.unidade = new Object();
+						item.unidade.id = $('#unidade').children('option:selected').val();
+
+						if (Object.keys(oldItem)) {
+							removerItem(oldItem);
+						}
+						salvarItem(item);
+
+						$('.myForm #exampleModal').modal('toggle');
+
+					}
+				}
+			});
+
+			$('.btn2').on('click', function (event) {
+				event.preventDefault();
+				oldItem = getTableItem($(this));
+				fillItemForm(oldItem);
+			})
+
+			function fillItemForm(item) {
+				$('.myForm #exampleModal').modal();
+				var mat = item.referencia.material.id;
+				var fab = item.referencia.fabricante.id;
+				var ref = item.referencia.referencia;
+				var qnt = item.quantidade;
+				var unt = item.unidade.id;
+
+				resetCategorias()
+					.then(x => updateMateriais([]))
+					.then(x => updateFabricantes(mat))
+					.then(x => updateReferencias(mat, fab))
+					.then(x => {
+						$('#material').val(mat);
+
+						$('#fabricante').val(fab);
+
+						$('#referencia').val(ref);
+
+						$('#quantidade').val(qnt);
+
+						$('#unidade').val(unt);
+					});
+			}
+
+			function resetCategorias() {
+				return new Promise(function (resolve) {
+					$('#categorias').val([]);
+					$('#categorias').select2({width: '100%'});
+					return resolve('ok')
+				})
+			}
+
+			$('.btn3').on('click', function (event) {
+				event.preventDefault();
+				removerItem(getTableItem($(this)));
+			})
+
+			function getTableItem(obj) {
+
+				var mat = obj.closest("td").children("input.mat").val();
+				var fab = obj.closest("td").children("input.fab").val();
+				var ref = obj.closest("td").children("input.ref").val();
+				var qnt = obj.closest("td").children("input.qnt").val();
+				var unt = obj.closest("td").children("input.unt").val();
+
+				var item = new Object();
+				item.referencia = new Object();
+				item.referencia.material = new Object();
+				item.referencia.material.id = mat;
+				item.referencia.fabricante = new Object();
+				item.referencia.fabricante.id = fab;
+				item.referencia.referencia = ref;
+				item.quantidade = qnt;
+				item.unidade = new Object();
+				item.unidade.id = unt;
+
+				return item;
+
+			}
+
+			function removerItem(item) {
+				var json = JSON.stringify(item);
+				$.post("remover-item", json, function (items) {
+					rebuildTable(items);
+				});
+			}
+
+			function salvarItem(item) {
+				var json = JSON.stringify(item);
+				$.post("salvar-item", json, function (items) {
+					rebuildTable(items);
+				});
+			}
+
+			var date_input = $('input[name="data"]'); //our date input has the name "date"
+			var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+			date_input.datepicker({
+				format: 'dd/mm/yyyy',
+				container: container,
+				todayHighlight: true,
+				autoclose: true,
+			});
+
+			function rebuildTable(data) {
+				var table = $('#tabelaDeItens');
+				table.find("td").remove();
+
+
+				for (var i = 0; i < data.length; i++) {
+					var row = "<tr>";
+					row += "<td>" + data[i].referencia?.material?.descricao + "</td>";
+					row += "<td>" + data[i].referencia?.fabricante?.nome + "</td>";
+					row += "<td>" + data[i].referencia?.referencia + "</td>";
+					row += "<td>" + data[i].quantidade + "</td>";
+					row += "<td>" + data[i].unidade?.abreviacao + "</td>";
+					row += "<td>"
+					row += "<input type='hidden' class='mat' value=" + data[i].referencia?.material?.id + ">"
+					row += "<input type='hidden' class='fab' value=" + data[i].referencia?.fabricante?.id + ">"
+					row += "<input type='hidden' class='ref' value=" + data[i].referencia?.referencia + ">"
+					row += "<input type='hidden' class='qnt' value=" + data[i].quantidade + ">"
+					row += "<input type='hidden' class='unt' value=" + data[i].unidade?.id + ">"
+					row += "<input type='button' class='btn btn-success btn2' value= 'Editar'>"
+					row += "<a type='submit' class='btn btn-danger btn3' href='/listas/editar'> Remover </a>"
+					row += "</td>"
+					table.append(row);
+				}
+
+				$('.btn2').on('click', function (event) {
+					event.preventDefault();
+					oldItem = getTableItem($(this));
+					fillItemForm(oldItem);
+				})
+
+				$('.btn3').on('click', function (event) {
+					event.preventDefault();
+					removerItem(getTableItem($(this)));
+				})
+			}
+		})
+
+	</script>
+
+</head>
+
+<body>
+
+	<header id="hostTag" th:include="header::header1"></header>
+
+	<div class="container col-sm12 col-md-6 col-md-offset-2">
+		<form id="main" action="salvar" method="post">
+			<br>
+			<h3>Cadastro de Lista de Materiais</h3>
+			<br>
+
+			<input type="hidden" th:field="*{projeto.id}" id="id">
+
+			<div class="form-group">
+				<label for="projeto">Projeto: </label><br>
+				<input type="text" id="projeto" placeholder="Projeto" class="form-control"
+					th:field="*{projeto.projeto}" />
+			</div>
+
+			<div class="form-group">
+				<label for="data">Data: </label><br>
+				<input type="text" class="form-control" id="data" name="data" placeholder="dd/MM/yyyy"
+					th:field="*{projeto.data}" />
+			</div>
+
+			<div class="form-group">
+				<label for="autor">Autor: </label><br>
+				<input type="text" class="form-control" id="autor" name="autor" placeholder="Autor"
+					th:field="*{projeto.autor.nome}" disabled />
+			</div>
+
+			<div>
+				<h4>Itens da Lista de Materiais</h4>
+
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">Material</th>
+							<th scope="col">Fabricante</th>
+							<th scope="col">Referencia</th>
+							<th scope="col">Quantidade</th>
+							<th scope="col">Unidade</th>
+							<th scope="col">Ações</th>
+						</tr>
+					</thead>
+
+					<tbody id="tabelaDeItens">
+						<tr th:each="item,refStat : ${projeto.lista}">
+							<td th:text="${item.referencia.material.descricao}"> </td>
+							<td th:text="${item.referencia.fabricante.nome}"> </td>
+							<td th:text="${item.referencia.referencia}"> </td>
+							<td th:text="${item.quantidade}"> </td>
+							<td th:text="${item.unidade.abreviacao}"> </td>
+							<td>
+								<input type="hidden" class="mat" th:value="${item.referencia.material.id}">
+								<input type="hidden" class="fab" th:value="${item.referencia.fabricante.id}">
+								<input type="hidden" class="ref" th:value="${item.referencia.referencia}">
+								<input type="hidden" class="qnt" th:value="${item.quantidade}">
+								<input type="hidden" class="unt" th:value="${item.unidade.id}">
+								<a type="submit" class="btn btn-success btn2" href="/listas/editar">Editar</a>
+								<a type="submit" class="btn btn-danger btn3" href="/listas/editar">Remover</a>
+
+							</td>
+						</tr>
+					</tbody>
+
+
+				</table>
+
+			</div>
+
+			<div class="form-group">
+				<input type="button" class="btn btn-primary eBtn" value="Adicionar Item"> </input>
+				<input type="submit" class="btn btn-success" name="action" value="Salvar">
+			</div>
+
+			<div class="myForm">
+				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="exampleModalLabel">Item da Lista de Materiais</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+
+								<div class="form-group">
+									<label for="categorias" class="col-form-label categoria">Filtrar por
+										categoria:</label><br>
+									<select class="form-control js-example-basic-multiple" id="categorias"
+										name="categorias" multiple="multiple">
+										<option th:each="cat : ${categorias}" th:value="${cat.id}"
+											th:text="${cat.nome}"> </option>
+									</select>
+								</div>
+
+
+								<div class="form-group">
+									<label for="material" class="col-form-label ">Material:</label>
+									<select class="form-control" id="material" name="material">
+										<option th:each="mat : ${materiais}" th:value="${mat.id}"
+											th:text="${mat.descricao}"> </option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="fabricante" class="col-form-label">Fabricante:</label>
+									<select class="form-control" id="fabricante" name="referencia">
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="referencia" class="col-form-label">Referencia:</label>
+									<select class="form-control" id="referencia" name="referencia">
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="quantidade" class="col-form-label">Quantidade:</label>
+									<input type="number" id="quantidade" name="quantidade" class="form-control" min="0"
+										step="1" placeholder="0">
+								</div>
+
+								<div class="form-group">
+									<label for="unidade" class="col-form-label">Unidades:</label>
+									<select class="form-control" id="unidade" name="unidade">
+										<option th:each="unit : ${unidades}" th:value="${unit.id}"
+											th:text="${unit.abreviacao}"> </option>
+									</select>
+								</div>
+
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+								<input type="submit" class="btn btn-primary" id="btn1" value="Salvar">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+
+</html>

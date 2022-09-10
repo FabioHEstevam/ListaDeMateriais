@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import br.com.estevam.listademateriais.dto.AutorDTO;
 
@@ -19,6 +20,7 @@ public class ListaDeMateriais implements Serializable{
 	@Id
 	private String id;
 	private String projeto;
+	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date data;
 	private AutorDTO autor;
 	
@@ -74,6 +76,10 @@ public class ListaDeMateriais implements Serializable{
 
 	public void setLista(Set<ItemDaListaDeMateriais> lista) {
 		this.lista = lista;
+	}
+	
+	public Integer getQuantidadeItens() {
+		return this.lista.size();
 	}
 
 	@Override

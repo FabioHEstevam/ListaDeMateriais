@@ -27,6 +27,7 @@ import br.com.estevam.listademateriais.repository.ListaDeMateriaisRepository;
 import br.com.estevam.listademateriais.repository.MaterialRepository;
 import br.com.estevam.listademateriais.repository.UnidadeRepository;
 import br.com.estevam.listademateriais.repository.UsuarioRepository;
+import br.com.estevam.listademateriais.services.util.Util;
 
 @Configuration
 public class Instantiaton implements CommandLineRunner{
@@ -62,7 +63,7 @@ public class Instantiaton implements CommandLineRunner{
 		categoriaRepository.deleteAll();
 		listaDeMateriaisRepository.deleteAll();
 		
-		Usuario us1 = new Usuario(null, "Fábio", "fabio@gmail.com");
+		Usuario us1 = new Usuario(null, "Fábio","(42) 99999-9999", "fabio@gmail.com",Util.md5("123"));
 		
 		usuarioRepository.save(us1);
 		
@@ -80,7 +81,7 @@ public class Instantiaton implements CommandLineRunner{
 		
 		categoriaRepository.save(cat1);
 		
-		Categoria cat2 = new Categoria(null, "Conectores", new CategoriaDTO(cat1));
+		Categoria cat2 = new Categoria(null, "Conectores", cat1);
 		
 		categoriaRepository.save(cat2);
 		
@@ -88,13 +89,20 @@ public class Instantiaton implements CommandLineRunner{
 		
 		categoriaRepository.save(cat1);
 		
+		Categoria cat3 = new Categoria(null, "Mecânica");
+		
+		categoriaRepository.save(cat3);
+
 		Material mat1 = new Material(null,"Terminal de compressão 35 mm");
 		mat1.getCategorias().addAll(Arrays.asList(new CategoriaDTO(cat1),new CategoriaDTO(cat2)));
 		
 		Material mat2 = new Material(null,"Terminal pré isolado garfo vermelho");
 		mat2.getCategorias().addAll(Arrays.asList(new CategoriaDTO(cat1),new CategoriaDTO(cat2)));
 		
-		materialRepository.saveAll(Arrays.asList(mat1,mat2));
+		Material mat3 = new Material(null,"Engrenagem");
+		mat3.getCategorias().addAll(Arrays.asList(new CategoriaDTO(cat3)));
+		
+		materialRepository.saveAll(Arrays.asList(mat1,mat2, mat3));
 		
 		//cat1.getMateriais().addAll(Arrays.asList(mat1,mat2));
 		//cat2.getMateriais().addAll(Arrays.asList(mat1,mat2));
@@ -107,11 +115,13 @@ public class Instantiaton implements CommandLineRunner{
 		mat2.getReferencias().add(ref2);
 		Referencia ref3 = new Referencia(new MaterialDTO(mat2),new FabricanteDTO(fab2),"A3");
 		mat2.getReferencias().add(ref3);
+		Referencia ref4 = new Referencia(new MaterialDTO(mat3),new FabricanteDTO(fab2),"B1");
+		mat3.getReferencias().add(ref4);
 		
-		materialRepository.saveAll(Arrays.asList(mat1,mat2));
+		materialRepository.saveAll(Arrays.asList(mat1,mat2,mat3));
 		
 		fab1.getReferencias().addAll(Arrays.asList(ref1,ref2));
-		fab2.getReferencias().addAll(Arrays.asList(ref3));
+		fab2.getReferencias().addAll(Arrays.asList(ref3,ref4));
 		
 		fabricanteRepository.saveAll(Arrays.asList(fab1,fab2));
 		
